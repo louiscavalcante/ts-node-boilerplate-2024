@@ -1,0 +1,36 @@
+{
+	"compilerOptions": {
+		"rootDir": "./src",
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"allowJs": true,
+		"resolveJsonModule": true,
+		"moduleDetection": "force",
+		"isolatedModules": true,
+		"strict": true,
+		"noUncheckedIndexedAccess": true,
+		"noEmit": true,
+		"noImplicitAny": false,
+		"sourceMap": true,
+		"outDir": "./dist",
+		"target": "ESNext",
+		"module": "NodeNext",
+		"lib": ["ESNext"],
+		"removeComments": true,
+		"typeRoots": ["./node_modules/@types", "./src/@types"],
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"forceConsistentCasingInFileNames": true,
+		"baseUrl": ".",
+		"paths": {
+			"@application/*": ["./src/application/*"],
+			"@configs/*": ["./src/configs/*"],
+			"@docs/*": ["./src/docs/*"],
+			"@domain/*": ["./src/domain/*"],
+			"@infrastructure/*": ["./src/infrastructure/*"],
+			"@shared/*": ["./src/shared/*"],
+			"@utils/*": ["./src/utils/*"]
+		}
+	},
+	"include": ["./src/**/*"]
+}

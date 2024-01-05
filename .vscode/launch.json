@@ -1,0 +1,30 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "debug-watch.v1",
+			"type": "node",
+			"request": "launch",
+			"runtimeExecutable": "node",
+			"runtimeArgs": ["--watch", "--nolazy", "-r", "ts-node/register/transpile-only", "-r", "tsconfig-paths/register"],
+			"args": ["${workspaceFolder}/src/app.ts"],
+			"cwd": "${workspaceRoot}",
+			"internalConsoleOptions": "openOnSessionStart",
+			"skipFiles": ["<node_internals>/**", "node_modules/**"],
+			"restart": true
+		},
+		{
+			"name": "jest-watch.v1",
+			"type": "node",
+			"request": "launch",
+			"program": "${workspaceFolder}/node_modules/.bin/jest",
+			"args": ["--config", "./jest/jest.debug-config.js", "--detectOpenHandles", "--runInBand", "--forceExit", "--watch"],
+			"cwd": "${workspaceFolder}",
+			"console": "integratedTerminal",
+			"internalConsoleOptions": "neverOpen",
+			"windows": {
+				"program": "${workspaceFolder}/node_modules/jest/bin/jest"
+			}
+		}
+	]
+}

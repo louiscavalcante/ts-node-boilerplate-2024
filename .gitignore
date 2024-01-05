@@ -1,0 +1,7 @@
+.husky/
+coverage/
+dist/
+environments/*
+!environments/.test.env
+!environments/.example.env
+node_modules/

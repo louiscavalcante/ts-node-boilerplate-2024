@@ -1,0 +1,19 @@
+{
+	"useTabs": true,
+	"tabWidth": 4,
+	"printWidth": 110,
+	"trailingComma": "es5",
+	"semi": false,
+	"singleQuote": true,
+	"quoteProps": "as-needed",
+	"bracketSpacing": true,
+	"arrowParens": "avoid",
+	"overrides": [
+		{
+			"files": "*.yaml",
+			"options": {
+                "tabWidth": 2
+			}
+		}
+	]
+}

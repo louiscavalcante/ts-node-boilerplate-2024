@@ -1,0 +1,15 @@
+{
+	"editor.formatOnSave": true,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"[javascript][typescript]": {
+		"editor.codeActionsOnSave": {
+			"source.fixAll.eslint": "explicit"
+		}
+	},
+	"typescript.preferences.importModuleSpecifier": "non-relative",
+	"typescript.suggest.paths": true,
+	"eslint.validate": ["javascript", "typepscript"],
+	"jest.jestCommandLine": "./node_modules/.bin/jest --config ./jest/jest.debug-config.js --detectOpenHandles --runInBand --forceExit",
+	"jestrunner.configPath": "./jest/jest.debug-config.js",
+	"jest.autoRun": "off"
+}

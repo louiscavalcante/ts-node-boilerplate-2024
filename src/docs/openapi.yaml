@@ -1,0 +1,52 @@
+openapi: '3.0.3'
+info:
+  title: microservice-name
+  version: '1.0'
+security:
+  - basicAuth: []
+servers:
+  - url: '/api'
+
+paths:
+  /users:
+    get:
+      tags:
+        - Users
+      description: >-
+        Get users
+      responses:
+        '200':
+          description: Successful request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    name:
+                      type: string
+
+        default:
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  schemas:
+    Error:
+      properties:
+        message:
+          type: string
+        error:
+          type: string
+      required:
+        - message
