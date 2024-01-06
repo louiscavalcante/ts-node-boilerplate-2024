@@ -9,6 +9,7 @@ import ErrorHandler from '@application/middlewares/error-handler.middleware'
 import * as env from '@configs/env-constants'
 import UsersControllerFactory from '@infrastructure/factory/users/users.controller.factory'
 import { rootApiPath } from '@shared/constants'
+import { terminateApp } from '@utils/utils'
 
 export default class App {
 	private readonly app: Express
@@ -52,7 +53,7 @@ export default class App {
 		})
 	}
 
-	public server(): Server {
+	public listen(): Server {
 		return this.app
 			.listen(env.PORT, () => {
 				console.log('Current environment:', env.NODE_ENV)
@@ -67,9 +68,22 @@ export default class App {
 async function bootstrap(): Promise<void> {
 	const app = new App()
 
-	// Start database here.
+	//todo Start database here.
 	await app.start()
-	app.server()
+	const server = app.listen()
+
+	const exitHandler = terminateApp(server, {
+		coredump: false,
+		timeout: 500,
+	})
+
+	process.on('uncaughtException', exitHandler(1, 'Unexpected Error'))
+	process.on('unhandledRejection', exitHandler(1, 'Unhandled Promise'))
+	process.on('SIGTERM', exitHandler(0, 'SIGTERM'))
+	process.on('SIGINT', exitHandler(0, 'SIGINT'))
+
+	// The line bellow will simulate a database crash to test unhandled rejection
+	// setTimeout(async () => await fakeDbCrash(), 5000)
 }
 
 bootstrap()

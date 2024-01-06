@@ -19,7 +19,11 @@ export class DomainError extends Error {
 }
 
 /**
- * It should not be used. This is just a group for instanceof.
+ * It should not be used as a throw.
+ *
+ * This is just a group class for extensions of infrastructure errors.
+ *
+ * Can be used as an instanceof InfrastructureError
  */
 export class InfrastructureError extends Error {
 	status: number
