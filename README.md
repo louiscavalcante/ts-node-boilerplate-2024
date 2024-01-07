@@ -25,6 +25,13 @@ $ npm run dev:requirements
     `http status 500` and the body response to: `Something bad happened`<br>
     Unless it's a `DomainError` that the client must know about!
 
+-   Unknown exceptions by the application, will use the Erlang's let it crash philosophy.<br>
+    Basically it lets the app crash so the orchestrator can restart the application.<br>
+    But how this really works?<br>
+    First the app will stop receiving request, then finish the requests that were already in progress and gracefully shuts down everything.<br>
+    This approach improves system reliability.<br>
+    If you're on Kubernetes, you can use Ingress or other load balancer strategies for your application.
+
 -   There's a `rateLimiter` method configured to limit request per user's ip.<br>
     You can delete it if you decide to use this project as a private API.
 
@@ -45,10 +52,6 @@ $ npm run dev:requirements
 
 ## WYP
 
--   Unknown exceptions by the application, will use the Erlang's let it crash philosophy.<br>
-    Basically it lets the app crash so the orchestrator can restart the application.<br>
-    But how this really works?<br>
-    First the app will stop receiving request, then finish the requests that were already in progress and gracefully shuts down everything.<br>
-    This approach improves system reliability.
-
 -   Request timeout
+
+-   Unit tests
