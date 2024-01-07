@@ -32,7 +32,7 @@ export async function gracefulShutdown(
 	//todo Close database here.
 
 	setTimeout(() => exit || process.exit(exitCode), timeout).unref()
-	console.log('\nGraceful shutdown complete!')
+	Logger.info('Graceful shutdown complete!')
 }
 
 export function fakeDbCrash(): Promise<Error> {

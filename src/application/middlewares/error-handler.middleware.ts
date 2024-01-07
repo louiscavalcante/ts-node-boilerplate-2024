@@ -10,7 +10,9 @@ export default class ErrorHandler {
 		return (error: ICustomError, req: Request, res: Response, _next: NextFunction) => {
 			error.stack = error.status === 404 || error instanceof DomainError ? '' : error.stack
 
-			Logger.error({
+			const logLevel = error instanceof DomainError ? 'warn' : 'error'
+
+			Logger[`${logLevel}`]({
 				status: error.status || 500,
 				name: error.name,
 				message: error.message,

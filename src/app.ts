@@ -2,11 +2,12 @@ import express, { Express, Request, Response } from 'express'
 import * as OpenApiValidator from 'express-openapi-validator'
 import { Server } from 'http'
 import path from 'path'
-import { ContextAsyncHooks } from 'traceability'
+import { ContextAsyncHooks, Logger, LoggerTraceability } from 'traceability'
 
 import { IControllers } from '@application/controllers/interfaces/controllers.interface'
 import ErrorHandler from '@application/middlewares/error-handler.middleware'
 import * as env from '@configs/env-constants'
+import { loggerConfiguration } from '@configs/logger.config'
 import UsersControllerFactory from '@infrastructure/factory/users/users.controller.factory'
 import { rootApiPath } from '@shared/constants'
 import { terminateApp } from '@utils/utils'
@@ -19,6 +20,7 @@ export default class App {
 	}
 
 	public async start(): Promise<void> {
+		LoggerTraceability.configure(loggerConfiguration)
 		this.app.disable('x-powered-by')
 		this.app.set('etag', false)
 		this.app.use(ContextAsyncHooks.getExpressMiddlewareTracking())
@@ -56,10 +58,10 @@ export default class App {
 	public listen(): Server {
 		return this.app
 			.listen(env.PORT, () => {
-				console.log('Current environment:', env.NODE_ENV)
-				console.log(`Health route: http://localhost:${env.PORT}/_health`)
-				console.log(`App listening on: http://localhost:${env.PORT}`)
-				console.log(`Try running this: http://localhost:${env.PORT}${rootApiPath}/users`)
+				Logger.info(`Current environment: ${env.NODE_ENV}`)
+				Logger.info(`Health route: http://localhost:${env.PORT}/_health`)
+				Logger.info(`App listening on: http://localhost:${env.PORT}`)
+				Logger.info(`Try running this: http://localhost:${env.PORT}${rootApiPath}/users`)
 			})
 			.setTimeout(30000)
 	}
@@ -74,7 +76,7 @@ async function bootstrap(): Promise<void> {
 
 	const exitHandler = terminateApp(server, {
 		coredump: false,
-		timeout: 500,
+		timeout: 30000,
 	})
 
 	process.on('uncaughtException', exitHandler(1, 'Unexpected Error'))
@@ -82,7 +84,7 @@ async function bootstrap(): Promise<void> {
 	process.on('SIGTERM', exitHandler(0, 'SIGTERM'))
 	process.on('SIGINT', exitHandler(0, 'SIGINT'))
 
-	// The line bellow will simulate a database crash to test unhandled rejection
+	// The line below will simulate a database crash to test unhandled rejection
 	// setTimeout(async () => await fakeDbCrash(), 5000)
 }
 
