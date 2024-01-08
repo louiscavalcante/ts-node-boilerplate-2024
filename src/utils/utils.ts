@@ -4,8 +4,8 @@ import { Logger } from 'traceability'
 import { IExit, IExitHandler } from '@utils/interfaces/utils.interface'
 
 export function terminateApp(server: Server, options = { coredump: false, timeout: 500 }): IExitHandler {
-	const exit: IExit = (code: number): void => {
-		options.coredump ? process.abort() : process.exit(code)
+	const exit = (exitCode: number): void => {
+		options.coredump ? process.abort() : process.exit(exitCode)
 	}
 
 	return (exitCode, reason) => (error, _promise) => {
@@ -22,16 +22,11 @@ export function terminateApp(server: Server, options = { coredump: false, timeou
 	}
 }
 
-export async function gracefulShutdown(
-	server: Server,
-	exitCode: number,
-	timeout: number,
-	exit?: IExit
-): Promise<void> {
-	server.close(() => exit || process.exit(exitCode))
+export function gracefulShutdown(server: Server, exitCode: number, timeout: number, exit?: IExit): void {
+	server.close(() => (exit ? exit(exitCode) : process.exit(exitCode)))
 	//todo Close database here.
 
-	setTimeout(() => exit || process.exit(exitCode), timeout).unref()
+	setTimeout(() => (exit ? exit(exitCode) : process.exit(exitCode)), timeout).unref()
 	Logger.info('Graceful shutdown complete!')
 }
 

@@ -1,5 +1,5 @@
 export interface IExit {
-	(code: number): void
+	(exitCode: number): void
 }
 
 export interface IExitHandler {
