@@ -76,7 +76,7 @@ async function bootstrap(): Promise<void> {
 
 	const exitHandler = terminateApp(server, {
 		coredump: false,
-		timeout: env.NODE_ENV === 'development' ? 100 : 10000,
+		timeout: 500,
 	})
 
 	process.on('uncaughtException', exitHandler(1, 'Unexpected Error'))

@@ -23,11 +23,15 @@ export function terminateApp(server: Server, options = { coredump: false, timeou
 }
 
 export function gracefulShutdown(server: Server, exitCode: number, timeout: number, exit?: IExit): void {
+	Logger.warn('Server stopped receiving connections!')
 	server.close(() => (exit ? exit(exitCode) : process.exit(exitCode)))
-	//todo Close database here.
 
-	setTimeout(() => (exit ? exit(exitCode) : process.exit(exitCode)), timeout).unref()
-	Logger.info('Graceful shutdown complete!')
+	setTimeout(() => {
+		Logger.warn('Graceful shutdown timeout reached!')
+		exit ? exit(exitCode) : process.exit(exitCode)
+	}, timeout).unref()
+
+	Logger.warn('Graceful shutdown complete!')
 }
 
 export function fakeDbCrash(): Promise<Error> {
