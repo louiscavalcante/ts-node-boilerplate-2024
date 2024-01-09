@@ -29,12 +29,12 @@ export function gracefulShutdown(server: Server, exitCode: number, timeout: numb
 		exit ? exit(exitCode) : process.exit(exitCode)
 	})
 
+	Logger.warn('Graceful shutdown complete!')
+
 	setTimeout(() => {
 		Logger.warn('Graceful shutdown timeout reached!')
 		exit ? exit(exitCode) : process.exit(exitCode)
 	}, timeout).unref()
-
-	Logger.warn('Graceful shutdown complete!')
 }
 
 export function fakeDbCrash(): Promise<Error> {
