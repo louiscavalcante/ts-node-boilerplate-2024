@@ -1,11 +1,17 @@
 openapi: '3.0.3'
 info:
   title: microservice-name
+  description: microservice
   version: '1.0'
 security:
   - basicAuth: []
 servers:
-  - url: '/api'
+  - url: 'http://localhost/api'
+    description: development
+  - url: 'https://staginghost/api'
+    description: staging
+  - url: 'https://productionhost/api'
+    description: production
 
 paths:
   /users:
