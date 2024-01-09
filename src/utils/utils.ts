@@ -24,7 +24,10 @@ export function terminateApp(server: Server, options = { coredump: false, timeou
 
 export function gracefulShutdown(server: Server, exitCode: number, timeout: number, exit?: IExit): void {
 	Logger.warn('Server stopped receiving connections!')
-	server.close(() => (exit ? exit(exitCode) : process.exit(exitCode)))
+	server.close(async () => {
+		//todo Close database here.
+		exit ? exit(exitCode) : process.exit(exitCode)
+	})
 
 	setTimeout(() => {
 		Logger.warn('Graceful shutdown timeout reached!')
