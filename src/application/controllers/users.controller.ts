@@ -21,8 +21,8 @@ export default class UsersController implements IControllers {
 	private getUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
 		try {
 			const results = await this.service.getUsers()
-			// The line below tests the request timeout.
-			// await new Promise(resolve => setTimeout(resolve, 60000))
+			// The line below tests timeouts.
+			// await new Promise(resolve => setTimeout(resolve, 40000))
 
 			res.status(200).send(results)
 		} catch (error) {

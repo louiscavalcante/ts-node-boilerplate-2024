@@ -1,6 +1,7 @@
 import express, { Express, Request, Response } from 'express'
 import * as OpenApiValidator from 'express-openapi-validator'
 import { Server } from 'http'
+import { Socket } from 'net'
 import path from 'path'
 import { ContextAsyncHooks, Logger, LoggerTraceability } from 'traceability'
 
@@ -56,14 +57,12 @@ export default class App {
 	}
 
 	public listen(): Server {
-		return this.app
-			.listen(env.PORT, () => {
-				Logger.info(`Current environment: ${env.NODE_ENV}`)
-				Logger.info(`Health route: http://localhost:${env.PORT}/_health`)
-				Logger.info(`App listening on: http://localhost:${env.PORT}`)
-				Logger.info(`Try running this: http://localhost:${env.PORT}${rootApiPath}/users`)
-			})
-			.setTimeout(30000)
+		return this.app.listen(env.PORT, () => {
+			Logger.info(`Current environment: ${env.NODE_ENV}`)
+			Logger.info(`Health route: http://localhost:${env.PORT}/_health`)
+			Logger.info(`App listening on: http://localhost:${env.PORT}`)
+			Logger.info(`Try running this: http://localhost:${env.PORT}${rootApiPath}/users`)
+		})
 	}
 }
 
@@ -73,6 +72,12 @@ async function bootstrap(): Promise<void> {
 	//todo Start database here.
 	await app.start()
 	const server = app.listen()
+
+	server.timeout = 30000
+	server.on('timeout', (socket: Socket) => {
+		Logger.error('Socket timeout')
+		socket.end()
+	})
 
 	const exitHandler = terminateApp(server, {
 		coredump: false,
