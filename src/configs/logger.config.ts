@@ -25,8 +25,8 @@ const formatted = format.combine(
 			: ''
 		logMsg += msg.name ? `name: ${msg.name} ` : ''
 		logMsg += msg.status ? `status: ${msg.status} ` : ''
-		logMsg += msg.exitCode ? `exitCode: ${msg.exitCode} ` : ''
-		logMsg += msg.reason ? `reason: ${msg.reason} ` : ''
+		logMsg += msg.signalCode ? `signalCode: ${msg.signalCode} ` : ''
+		logMsg += msg.exitReason ? `exitReason: ${msg.exitReason} ` : ''
 		logMsg += msg.stack ? `stack: ${JSON.stringify(msg.stack)} ` : ''
 
 		return logMsg
