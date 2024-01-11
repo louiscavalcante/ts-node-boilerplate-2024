@@ -1,4 +1,4 @@
-const path = require('path')
+const path = require('node:path')
 const { pathsToModuleNameMapper } = require('ts-jest')
 
 const { compilerOptions } = require('../tsconfig.json')

@@ -27,6 +27,7 @@
 			"@configs/*": ["./src/configs/*"],
 			"@docs/*": ["./src/docs/*"],
 			"@domain/*": ["./src/domain/*"],
+			"@helpers/*": ["./src/helpers/*"],
 			"@infrastructure/*": ["./src/infrastructure/*"],
 			"@shared/*": ["./src/shared/*"],
 			"@utils/*": ["./src/utils/*"]

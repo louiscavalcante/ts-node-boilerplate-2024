@@ -1,12 +1,12 @@
 import { format, addColors, LoggerTraceability } from 'traceability'
 
-const colors = {
+const levelColors = {
 	info: 'green',
 	warn: 'yellow',
 	error: 'red',
 }
 const colorizer = format.colorize()
-addColors(colors)
+addColors(levelColors)
 
 export const loggerConfiguration = LoggerTraceability.getLoggerOptions()
 

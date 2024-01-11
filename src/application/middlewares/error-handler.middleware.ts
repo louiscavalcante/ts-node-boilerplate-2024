@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction, ErrorRequestHandler } from 'express'
 import { Logger } from 'traceability'
 
-import { ICustomError } from '@application/middlewares/interfaces/error-handler.interface'
+import { ICustomError } from '@application/middlewares/interfaces/error-handler.middleware.interface'
 import * as env from '@configs/env-constants'
 import { DomainError } from '@shared/custom-errors'
 

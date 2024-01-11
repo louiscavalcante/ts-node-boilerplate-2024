@@ -1,18 +1,19 @@
 import timeout from 'connect-timeout'
 import express, { Express, Request, Response, NextFunction } from 'express'
 import * as OpenApiValidator from 'express-openapi-validator'
-import { Server } from 'http'
-import { Socket } from 'net'
-import path from 'path'
+import { Server } from 'node:http'
+import { Socket } from 'node:net'
+import path from 'node:path'
 import { ContextAsyncHooks, Logger, LoggerTraceability } from 'traceability'
 
 import { IControllers } from '@application/controllers/interfaces/controllers.interface'
 import ErrorHandler from '@application/middlewares/error-handler.middleware'
 import * as env from '@configs/env-constants'
 import { loggerConfiguration } from '@configs/logger.config'
+import { EExitReason } from '@helpers/interfaces/shutdown.helpers.interface'
+import { shutdownApp } from '@helpers/shutdown.helper'
 import UsersControllerFactory from '@infrastructure/factory/users/users.controller.factory'
-import { GRACEFUL_SHUTDOWN_TIMEOUT, REQUEST_TIMEOUT, ROOT_API_PATH, SOCKET_TIMEOUT } from '@shared/constants'
-import { terminateApp } from '@utils/utils'
+import { ROOT_API_PATH } from '@shared/constants'
 
 export default class App {
 	private readonly app: Express
@@ -40,7 +41,7 @@ export default class App {
 			})
 		)
 
-		this.app.use(timeout(REQUEST_TIMEOUT))
+		this.app.use(timeout('15s'))
 		this.initRoutes([UsersControllerFactory.create()])
 		this.app.use(this.haltOnTimedout)
 		this.app.use(ErrorHandler.middleware())
@@ -79,21 +80,21 @@ async function bootstrap(): Promise<void> {
 	await app.start()
 	const server = app.listen()
 
-	server.timeout = SOCKET_TIMEOUT
+	server.timeout = 30000
 	server.on('timeout', (socket: Socket) => {
 		Logger.error('Socket timeout')
 		socket.end()
 	})
 
-	const exitHandler = terminateApp(server, {
+	const exitHandler = shutdownApp(server, {
 		coredump: false,
-		timeout: GRACEFUL_SHUTDOWN_TIMEOUT,
+		timeout: 500,
 	})
 
-	process.on('uncaughtException', exitHandler(1, 'Unexpected Error'))
-	process.on('unhandledRejection', exitHandler(1, 'Unhandled Promise'))
-	process.on('SIGTERM', exitHandler(0, 'SIGTERM'))
-	process.on('SIGINT', exitHandler(0, 'SIGINT'))
+	process.on('uncaughtException', exitHandler(1, EExitReason.UNEXPECTED_ERROR))
+	process.on('unhandledRejection', exitHandler(1, EExitReason.UNHANDLED_PROMISE))
+	process.on('SIGTERM', exitHandler(0, EExitReason.SIGTERM))
+	process.on('SIGINT', exitHandler(0, EExitReason.SIGINT))
 
 	// The line below will simulate a database crash to test unhandled rejection
 	// setTimeout(async () => await fakeDbCrash(), 5000)
