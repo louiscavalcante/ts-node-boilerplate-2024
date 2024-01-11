@@ -7,7 +7,7 @@ import { DomainError } from '@shared/custom-errors'
 
 export default class ErrorHandler {
 	public static middleware(): ErrorRequestHandler {
-		return (error: ICustomError, req: Request, res: Response, _next: NextFunction) => {
+		return (error: ICustomError, _req: Request, res: Response, _next: NextFunction) => {
 			error.stack = error.status === 404 || error instanceof DomainError ? '' : error.stack
 
 			const logLevel = error instanceof DomainError ? 'warn' : 'error'

@@ -52,6 +52,4 @@ $ npm run dev:requirements
 
 ## WYP
 
--   Request timeout
-
 -   Unit tests

@@ -1,4 +1,5 @@
-import express, { Express, Request, Response } from 'express'
+import timeout from 'connect-timeout'
+import express, { Express, Request, Response, NextFunction } from 'express'
 import * as OpenApiValidator from 'express-openapi-validator'
 import { Server } from 'http'
 import { Socket } from 'net'
@@ -39,8 +40,9 @@ export default class App {
 			})
 		)
 
+		this.app.use(timeout('15s'))
 		this.initRoutes([UsersControllerFactory.create()])
-
+		this.app.use(this.haltOnTimedout)
 		this.app.use(ErrorHandler.middleware())
 	}
 
@@ -48,6 +50,10 @@ export default class App {
 		controllersFactories.forEach(controllerFactory =>
 			this.app.use(rootApiPath, controllerFactory.initRouter())
 		)
+	}
+
+	private haltOnTimedout(req: Request, res: Response, next: NextFunction): void {
+		if (!req.timedout) next()
 	}
 
 	private healthCheck(): Express {
