@@ -10,8 +10,8 @@ import { IControllers } from '@application/controllers/interfaces/controllers.in
 import ErrorHandler from '@application/middlewares/error-handler.middleware'
 import * as env from '@configs/env-constants'
 import { loggerConfiguration } from '@configs/logger.config'
-import { EExitReason } from '@helpers/interfaces/shutdown.helpers.interface'
-import { shutdownApp } from '@helpers/shutdown.helper'
+import { gracefulShutdown } from '@helpers/graceful-shutdown.helper'
+import { EExitReason } from '@helpers/interfaces/graceful-shutdown.helper.interface'
 import UsersControllerFactory from '@infrastructure/factory/users/users.controller.factory'
 import { ROOT_API_PATH } from '@shared/constants'
 
@@ -86,7 +86,7 @@ async function bootstrap(): Promise<void> {
 		socket.end()
 	})
 
-	const exitHandler = shutdownApp(server, {
+	const exitHandler = gracefulShutdown(server, {
 		coredump: false,
 		timeout: 500,
 	})
