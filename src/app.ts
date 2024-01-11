@@ -11,7 +11,7 @@ import ErrorHandler from '@application/middlewares/error-handler.middleware'
 import * as env from '@configs/env-constants'
 import { loggerConfiguration } from '@configs/logger.config'
 import UsersControllerFactory from '@infrastructure/factory/users/users.controller.factory'
-import { rootApiPath } from '@shared/constants'
+import { GRACEFUL_SHUTDOWN_TIMEOUT, REQUEST_TIMEOUT, ROOT_API_PATH, SOCKET_TIMEOUT } from '@shared/constants'
 import { terminateApp } from '@utils/utils'
 
 export default class App {
@@ -40,7 +40,7 @@ export default class App {
 			})
 		)
 
-		this.app.use(timeout('15s'))
+		this.app.use(timeout(REQUEST_TIMEOUT))
 		this.initRoutes([UsersControllerFactory.create()])
 		this.app.use(this.haltOnTimedout)
 		this.app.use(ErrorHandler.middleware())
@@ -48,7 +48,7 @@ export default class App {
 
 	private initRoutes(controllersFactories: Array<IControllers>) {
 		controllersFactories.forEach(controllerFactory =>
-			this.app.use(rootApiPath, controllerFactory.initRouter())
+			this.app.use(ROOT_API_PATH, controllerFactory.initRouter())
 		)
 	}
 
@@ -67,7 +67,7 @@ export default class App {
 			Logger.info(`Current environment: ${env.NODE_ENV}`)
 			Logger.info(`Health route: http://localhost:${env.PORT}/_health`)
 			Logger.info(`App listening on: http://localhost:${env.PORT}`)
-			Logger.info(`Try running this: http://localhost:${env.PORT}${rootApiPath}/users`)
+			Logger.info(`Try running this: http://localhost:${env.PORT}${ROOT_API_PATH}/users`)
 		})
 	}
 }
@@ -79,7 +79,7 @@ async function bootstrap(): Promise<void> {
 	await app.start()
 	const server = app.listen()
 
-	server.timeout = 30000
+	server.timeout = SOCKET_TIMEOUT
 	server.on('timeout', (socket: Socket) => {
 		Logger.error('Socket timeout')
 		socket.end()
@@ -87,7 +87,7 @@ async function bootstrap(): Promise<void> {
 
 	const exitHandler = terminateApp(server, {
 		coredump: false,
-		timeout: 500,
+		timeout: GRACEFUL_SHUTDOWN_TIMEOUT,
 	})
 
 	process.on('uncaughtException', exitHandler(1, 'Unexpected Error'))
