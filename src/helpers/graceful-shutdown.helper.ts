@@ -19,7 +19,7 @@ export function gracefulShutdown(server: Server, options = { coredump: false, ti
 		}
 
 		const shutdownPhases = async () => {
-			//todo Close database here.
+			//TODO Close database here.
 			exit(signalCode)
 		}
 

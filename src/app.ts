@@ -76,7 +76,7 @@ export default class App {
 async function bootstrap(): Promise<void> {
 	const app = new App()
 
-	//todo Start database here.
+	//TODO Start database here.
 	await app.start()
 	const server = app.listen()
 
