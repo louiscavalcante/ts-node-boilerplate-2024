@@ -1,7 +1,7 @@
 import express, { Router, Request, Response, NextFunction } from 'express'
 
 import { IControllers } from '@application/controllers/interfaces/controllers.interface'
-import { IUsersService } from '@application/services/interfaces/users.service.interface'
+import { IUsersService } from '@domain/services/interfaces/users.service.interface'
 
 export default class UsersController implements IControllers {
 	private readonly router: Router = express.Router()

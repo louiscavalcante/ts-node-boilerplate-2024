@@ -8,12 +8,12 @@ import { ContextAsyncHooks, Logger, LoggerTraceability } from 'traceability'
 
 import { IControllers } from '@application/controllers/interfaces/controllers.interface'
 import ErrorHandler from '@application/middlewares/error-handler.middleware'
-import * as env from '@configs/env-constants'
+import * as env from '@configs/env-constants.config'
 import { loggerConfiguration } from '@configs/logger.config'
 import { gracefulShutdown } from '@helpers/graceful-shutdown.helper'
 import { EExitReason } from '@helpers/interfaces/graceful-shutdown.helper.interface'
 import UsersControllerFactory from '@infrastructure/factory/users/users.controller.factory'
-import { ROOT_API_PATH } from '@shared/constants'
+import { API_ROOT_PATH } from '@shared/constants.shared'
 
 export default class App {
 	private readonly app: Express
@@ -31,7 +31,7 @@ export default class App {
 		this.app.use(express.urlencoded({ limit: '5mb', extended: true }))
 		this.healthCheck()
 		// Activate and configure the line bellow for public API's
-		// this.app.use(Middlewares.rateLimiter(1, 10))
+		// this.app.use(RateLimit.middleware(1, 10))
 		this.app.use(
 			OpenApiValidator.middleware({
 				apiSpec: path.join(__dirname, 'docs/openapi.yaml'),
@@ -49,7 +49,7 @@ export default class App {
 
 	private initRoutes(controllersFactories: Array<IControllers>) {
 		controllersFactories.forEach(controllerFactory =>
-			this.app.use(ROOT_API_PATH, controllerFactory.initRouter())
+			this.app.use(API_ROOT_PATH, controllerFactory.initRouter())
 		)
 	}
 
@@ -68,7 +68,7 @@ export default class App {
 			Logger.info(`Current environment: ${env.NODE_ENV}`)
 			Logger.info(`Health route: http://localhost:${env.PORT}/_health`)
 			Logger.info(`App listening on: http://localhost:${env.PORT}`)
-			Logger.info(`Try running this: http://localhost:${env.PORT}${ROOT_API_PATH}/users`)
+			Logger.info(`Try running this: http://localhost:${env.PORT}${API_ROOT_PATH}/users`)
 		})
 	}
 }

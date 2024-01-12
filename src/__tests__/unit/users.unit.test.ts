@@ -1,4 +1,4 @@
-import { PORT } from '@configs/env-constants'
+import { PORT } from '@configs/env-constants.config'
 
 describe('Users Unit Tests', () => {
 	it('Should pass', () => {

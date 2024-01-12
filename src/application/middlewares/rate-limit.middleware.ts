@@ -1,7 +1,7 @@
 import rateLimit, { RateLimitRequestHandler } from 'express-rate-limit'
 
-export default class Middlewares {
-	public static rateLimiter(seconds: number, maxRequest: number): RateLimitRequestHandler {
+export default class RateLimit {
+	public static middleware(seconds: number, maxRequest: number): RateLimitRequestHandler {
 		return rateLimit({
 			windowMs: seconds * 1000, // X seconds
 			max: maxRequest, // Limit each IP to Y requests per `window` (here, per X seconds)
