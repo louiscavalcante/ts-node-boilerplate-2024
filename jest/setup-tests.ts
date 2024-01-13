@@ -1,3 +1,4 @@
 import dotenv from 'dotenv'
+import path from 'node:path'
 
-dotenv.config({ path: '../environments/.test.env' })
+dotenv.config({ path: path.resolve(__dirname, '../environments/.test.env') })

@@ -8,7 +8,6 @@ import { ContextAsyncHooks, Logger, LoggerTraceability } from 'traceability'
 
 import { IControllers } from '@application/controllers/interfaces/controllers.interface'
 import ErrorHandler from '@application/middlewares/error-handler.middleware'
-import * as env from '@configs/env-constants.config'
 import { loggerConfiguration } from '@configs/logger.config'
 import { gracefulShutdown } from '@helpers/graceful-shutdown.helper'
 import { EExitReason } from '@helpers/interfaces/graceful-shutdown.helper.interface'
@@ -64,11 +63,13 @@ export default class App {
 	}
 
 	public listen(): Server {
-		return this.app.listen(env.PORT, () => {
-			Logger.info(`Current environment: ${env.NODE_ENV}`)
-			Logger.info(`Health route: http://localhost:${env.PORT}/_health`)
-			Logger.info(`App listening on: http://localhost:${env.PORT}`)
-			Logger.info(`Try running this: http://localhost:${env.PORT}${API_ROOT_PATH}/users`)
+		return this.app.listen(Number(process.env.PORT), () => {
+			Logger.info(`Current environment: ${process.env.NODE_ENV}`)
+			Logger.info(`Health route: http://localhost:${Number(process.env.PORT)}/_health`)
+			Logger.info(`App listening on: http://localhost:${Number(process.env.PORT)}`)
+			Logger.info(
+				`Try running this: http://localhost:${Number(process.env.PORT)}${API_ROOT_PATH}/users`
+			)
 		})
 	}
 }

@@ -2,7 +2,6 @@ import { Request, Response, NextFunction, ErrorRequestHandler } from 'express'
 import { Logger } from 'traceability'
 
 import { ICustomError } from '@application/middlewares/interfaces/error-handler.middleware.interface'
-import * as env from '@configs/env-constants.config'
 import { DomainError } from '@shared/custom-errors.shared'
 
 export default class ErrorHandler {
@@ -19,7 +18,7 @@ export default class ErrorHandler {
 				stack: error.stack,
 			})
 
-			if (env.NODE_ENV === 'production') {
+			if (process.env.NODE_ENV === 'production') {
 				if (error instanceof DomainError) {
 					return res.status(error.status || 500).send({
 						message: error.message,
