@@ -4,15 +4,15 @@ import RateLimit from '@application/middlewares/rate-limit.middleware'
 
 jest.mock('express-rate-limit')
 
-describe('RateLimit Middleware', () => {
+describe('RateLimit middleware', () => {
+	const seconds = 60
+	const maxRequest = 100
+
 	afterEach(() => {
 		jest.clearAllMocks()
 	})
 
 	it('should create middleware with correct configuration', () => {
-		const seconds = 60
-		const maxRequest = 100
-
 		RateLimit.middleware(seconds, maxRequest)
 
 		expect(rateLimit).toHaveBeenCalledWith({
@@ -25,8 +25,6 @@ describe('RateLimit Middleware', () => {
 	})
 
 	it('should use the IP address of the client as the key', () => {
-		const seconds = 60
-		const maxRequest = 100
 		const mockRequest = {
 			headers: {
 				'x-forwarded-for': '192.168.0.1',
@@ -45,8 +43,6 @@ describe('RateLimit Middleware', () => {
 	})
 
 	it('should fallback to remote address if x-forwarded-for is not present', () => {
-		const seconds = 60
-		const maxRequest = 100
 		const mockRequest = {
 			headers: {},
 			socket: {
