@@ -15,8 +15,8 @@ module.exports = {
 		'^.+.(t|j)s$': 'ts-jest',
 	},
 	coverageProvider: 'v8',
-	coverageReporters: ['lcov', 'html', 'cobertura'],
+	coverageReporters: ['lcov', 'html', 'cobertura', 'text-summary'],
 	collectCoverageFrom: ['**/*.(t|j)s', '!**/test/**'],
-	coveragePathIgnorePatterns: ['/src/app.ts', '/src/contracts/', '/src/__tests__'],
+	coveragePathIgnorePatterns: ['/src/app.ts', '/src/docs/', '/src/__tests__'],
 	moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: path.dirname(__dirname) }),
 }
