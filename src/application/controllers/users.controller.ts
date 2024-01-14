@@ -14,8 +14,8 @@ export default class UsersController implements IControllers {
 		return this.router
 	}
 
-	private getRoutes(): void {
-		this.router.get('/users', this.getUsers)
+	private getRoutes(): Router {
+		return this.router.get('/users', this.getUsers)
 	}
 
 	private getUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {

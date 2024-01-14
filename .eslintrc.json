@@ -1,6 +1,6 @@
 {
 	"env": {
-		"es2022": true,
+		"es2024": true,
 		"node": true,
 		"jest": true
 	},
@@ -33,7 +33,6 @@
 		"no-param-reassign": "error",
 		"no-new": "off",
 		"no-prototype-builtins": "off",
-		"no-restricted-syntax": "off",
 		"max-classes-per-file": "off",
 		"@typescript-eslint/no-explicit-any": "off",
 		"no-console": "off",
