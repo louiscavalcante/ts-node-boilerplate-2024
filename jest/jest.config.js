@@ -16,7 +16,7 @@ module.exports = {
 	},
 	coverageProvider: 'v8',
 	coverageReporters: ['lcov', 'html', 'cobertura', 'text-summary'],
-	collectCoverageFrom: ['**/*.(t|j)s', '!**/test/**'],
-	coveragePathIgnorePatterns: ['/src/app.ts', '/src/docs/', '/src/__tests__'],
+	collectCoverageFrom: ['**/*.(t|j)s', '!**/test/**', '!**/*.example.(t|j)s'],
+	coveragePathIgnorePatterns: ['/src/app.ts', '/src/docs/', '/src/__tests__', '/interfaces/'],
 	moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: path.dirname(__dirname) }),
 }

@@ -96,9 +96,6 @@ async function bootstrap(): Promise<void> {
 	process.on('unhandledRejection', exitHandler(1, EExitReason.UNHANDLED_PROMISE))
 	process.on('SIGTERM', exitHandler(0, EExitReason.SIGTERM))
 	process.on('SIGINT', exitHandler(0, EExitReason.SIGINT))
-
-	// The line below will simulate a database crash to test unhandled rejection
-	// setTimeout(async () => await fakeDbCrash(), 5000)
 }
 
 bootstrap()
