@@ -83,7 +83,6 @@ async function bootstrap(): Promise<void> {
 
 	server.timeout = 30000
 	server.on('timeout', (socket: Socket) => {
-		Logger.error('Socket timeout')
 		socket.end()
 	})
 
