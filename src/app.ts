@@ -9,9 +9,9 @@ import { ContextAsyncHooks, Logger, LoggerTraceability } from 'traceability'
 import { IControllers } from '@application/controllers/interfaces/controllers.interface'
 import ErrorHandler from '@application/middlewares/error-handler.middleware'
 import { loggerConfiguration } from '@configs/logger.config'
+import UsersControllerFactory from '@domain/factory/users/users.controller.factory'
 import { gracefulShutdown } from '@helpers/graceful-shutdown.helper'
 import { EExitReason } from '@helpers/interfaces/graceful-shutdown.helper.interface'
-import UsersControllerFactory from '@infrastructure/factory/users/users.controller.factory'
 import { API_ROOT_PATH } from '@shared/constants.shared'
 
 export default class App {

@@ -7,7 +7,7 @@ import ErrorHandler from '@application/middlewares/error-handler.middleware'
 import { loggerConfiguration } from '@configs/logger.config'
 import { DomainError } from '@shared/custom-errors.shared'
 
-const gettingLoggerForTest = () => {
+const getLoggerOutput = () => {
 	const loggerOutputData: string[] = []
 	const stream = new Writable()
 	stream._write = (chunk, encoding, next) => {
@@ -26,17 +26,9 @@ describe('ErrorHandler middleware', () => {
 	let res: Response
 	let next: NextFunction
 	let loggerOutput: string[]
-	const originalEnv = process.env
-	let env: { NODE_ENV: string } | NodeJS.ProcessEnv
-
-	beforeAll(() => {
-		jest.useFakeTimers({ advanceTimers: true })
-		jest.setSystemTime(new Date('2024-01-20T13:00:00.000Z'))
-	})
 
 	beforeEach(() => {
-		env = originalEnv
-		const { loggerOutputData } = gettingLoggerForTest()
+		const { loggerOutputData } = getLoggerOutput()
 		loggerOutput = loggerOutputData
 
 		req = {} as Request
@@ -47,13 +39,8 @@ describe('ErrorHandler middleware', () => {
 		next = jest.fn()
 	})
 
-	afterEach(() => {
-		process.env = originalEnv
-		jest.clearAllMocks()
-	})
-
 	it('should log an error and send a generic message in production mode for non-DomainError', () => {
-		env.NODE_ENV = 'production'
+		process.env.NODE_ENV = 'production'
 
 		const error = {
 			name: 'TestError',
@@ -90,7 +77,7 @@ describe('ErrorHandler middleware', () => {
 	})
 
 	it('should log an error and send error details in non-production mode', () => {
-		env.NODE_ENV = 'development'
+		process.env.NODE_ENV = 'development'
 
 		const error = new DomainError('Test error message')
 

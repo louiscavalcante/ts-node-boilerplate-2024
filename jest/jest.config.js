@@ -9,7 +9,8 @@ module.exports = {
 	bail: 1,
 	testTimeout: 30000,
 	testEnvironment: 'node',
-	setupFiles: ['../jest/setup-tests.ts'],
+	setupFiles: ['../jest/setup-files.ts'],
+	setupFilesAfterEnv: ['../jest/setup-files-after-env.ts'],
 	moduleFileExtensions: ['js', 'json', 'ts'],
 	transform: {
 		'^.+.(t|j)s$': 'ts-jest',

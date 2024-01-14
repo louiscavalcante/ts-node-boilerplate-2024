@@ -1,4 +1,4 @@
-describe('Users Unit Tests', () => {
+describe('Users unit', () => {
 	const originalEnv = process.env
 	let env: { PORT: string } | NodeJS.ProcessEnv
 
