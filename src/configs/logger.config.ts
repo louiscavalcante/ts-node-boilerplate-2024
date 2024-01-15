@@ -18,11 +18,7 @@ const formatted = format.combine(
 	format.printf(msg => {
 		let logMsg = `${colorizer.colorize(msg.level, `${msg.timestamp} - ${msg.level}:`)} `
 		logMsg += msg.cid ? `cid: ${msg.cid} ` : ''
-		logMsg += msg.message
-			? typeof msg.message === 'string'
-				? `${msg.message} `
-				: `${JSON.stringify(msg.message)} `
-			: ''
+		logMsg += msg.message ? `${msg.message} ` : ''
 		logMsg += msg.name ? `name: ${msg.name} ` : ''
 		logMsg += msg.status ? `status: ${msg.status} ` : ''
 		logMsg += msg.signalCode ? `signalCode: ${msg.signalCode} ` : ''

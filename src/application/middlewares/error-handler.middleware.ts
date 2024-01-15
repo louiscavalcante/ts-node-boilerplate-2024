@@ -21,7 +21,7 @@ export default class ErrorHandler {
 
 			if (process.env.NODE_ENV === 'production') {
 				if (error instanceof DomainError) {
-					return res.status(error.status || 500).send({
+					return res.status(error.status).send({
 						message: error.message,
 					})
 				}

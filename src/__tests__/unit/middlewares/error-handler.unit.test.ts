@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from 'express'
 import { Writable } from 'node:stream'
-import { LoggerTraceability } from 'traceability'
+import { Logger, LoggerTraceability } from 'traceability'
 import winston from 'winston'
 
 import ErrorHandler from '@application/middlewares/error-handler.middleware'
 import { loggerConfiguration } from '@configs/logger.config'
-import { DomainError } from '@shared/custom-errors.shared'
+import { AxiosRequestError, DomainError } from '@shared/custom-errors.shared'
 
 const getLoggerOutput = () => {
 	const loggerOutputData: string[] = []
@@ -22,21 +22,21 @@ const getLoggerOutput = () => {
 }
 
 describe('ErrorHandler middleware', () => {
-	let req: Request
-	let res: Response
-	let next: NextFunction
+	let mockRequest: Request
+	let mockResponse: Response
+	let mockNext: NextFunction
 	let loggerOutput: string[]
 
 	beforeEach(() => {
 		const { loggerOutputData } = getLoggerOutput()
 		loggerOutput = loggerOutputData
 
-		req = {} as Request
-		res = {
-			status: jest.fn(() => res),
+		mockRequest = {} as Request
+		mockResponse = {
+			status: jest.fn(() => mockResponse),
 			send: jest.fn(),
 		} as any
-		next = jest.fn()
+		mockNext = jest.fn()
 	})
 
 	it('should log an error and send a generic message in production mode for non-DomainError', () => {
@@ -49,13 +49,13 @@ describe('ErrorHandler middleware', () => {
 			status: 500,
 		}
 
-		ErrorHandler.middleware()(error, req, res, next)
+		ErrorHandler.middleware()(error, mockRequest, mockResponse, mockNext)
 
 		expect(JSON.stringify(loggerOutput)).toEqual(
 			'["\\u001b[31m2024-01-20T13:00:00.000Z - error:\\u001b[39m Test error message name: TestError status: 500 stack: \\"Test error stack\\" \\n"]'
 		)
-		expect(res.status).toHaveBeenCalledWith(500)
-		expect(res.send).toHaveBeenCalledWith({
+		expect(mockResponse.status).toHaveBeenCalledWith(500)
+		expect(mockResponse.send).toHaveBeenCalledWith({
 			message: 'Something bad happened',
 		})
 	})
@@ -65,13 +65,13 @@ describe('ErrorHandler middleware', () => {
 
 		const error = new DomainError('Test error message')
 
-		ErrorHandler.middleware()(error, req, res, next)
+		ErrorHandler.middleware()(error, mockRequest, mockResponse, mockNext)
 
 		expect(JSON.stringify(loggerOutput)).toEqual(
 			'["\\u001b[33m2024-01-20T13:00:00.000Z - warn:\\u001b[39m Test error message name: DomainError status: 422 \\n"]'
 		)
-		expect(res.status).toHaveBeenCalledWith(error.status)
-		expect(res.send).toHaveBeenCalledWith({
+		expect(mockResponse.status).toHaveBeenCalledWith(error.status)
+		expect(mockResponse.send).toHaveBeenCalledWith({
 			message: error.message,
 		})
 	})
@@ -81,15 +81,50 @@ describe('ErrorHandler middleware', () => {
 
 		const error = new DomainError('Test error message')
 
-		ErrorHandler.middleware()(error, req, res, next)
+		ErrorHandler.middleware()(error, mockRequest, mockResponse, mockNext)
 
 		expect(JSON.stringify(loggerOutput)).toEqual(
 			'["\\u001b[33m2024-01-20T13:00:00.000Z - warn:\\u001b[39m Test error message name: DomainError status: 422 \\n"]'
 		)
-		expect(res.status).toHaveBeenCalledWith(error.status)
-		expect(res.send).toHaveBeenCalledWith({
+		expect(mockResponse.status).toHaveBeenCalledWith(error.status)
+		expect(mockResponse.send).toHaveBeenCalledWith({
 			message: error.message,
 			stack: error.stack,
+		})
+	})
+
+	test('should log status 500 if no status is passed', () => {
+		jest.mock('traceability').spyOn(Logger, 'error')
+
+		const error = new Error('Custom error')
+
+		ErrorHandler.middleware()(error, mockRequest as Request, mockResponse as Response, mockNext)
+
+		expect(Logger.error).toHaveBeenCalledWith(
+			expect.objectContaining({
+				status: 500,
+			})
+		)
+	})
+
+	test('should send axiosError to the client if not in production environment', () => {
+		const error = new AxiosRequestError({
+			name: 'axiosRequestError',
+			message: 'axios message',
+			isAxiosError: true,
+			toJSON: () => {
+				return {}
+			},
+		})
+
+		error.stack = 'Custom stack trace'
+
+		ErrorHandler.middleware()(error, mockRequest as Request, mockResponse as Response, mockNext)
+
+		expect(mockResponse.send).toHaveBeenCalledWith({
+			message: 'axios message',
+			axiosError: expect.any(Object),
+			stack: 'Custom stack trace',
 		})
 	})
 })

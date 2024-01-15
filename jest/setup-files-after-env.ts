@@ -14,6 +14,5 @@ beforeEach(async () => {
 
 afterEach(async () => {
 	process.env = env
-
 	jest.clearAllMocks()
 })
