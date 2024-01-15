@@ -15,6 +15,7 @@ export default class ErrorHandler {
 				status: error.status || 500,
 				name: error.name,
 				message: error.message,
+				axiosError: error.axiosError,
 				stack: error.stack,
 			})
 
@@ -30,8 +31,9 @@ export default class ErrorHandler {
 				})
 			}
 
-			res.status(error.status || 500).send({
+			return res.status(error.status || 500).send({
 				message: error.message,
+				...(error.axiosError ? { axiosError: error.axiosError } : {}),
 				stack: error.stack,
 			})
 		}

@@ -18,12 +18,11 @@ export default class UsersController implements IControllers {
 		return this.router.get('/users', this.getUsers)
 	}
 
-	private getUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+	private getUsers = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
 		try {
 			const results = await this.service.getUsers()
 
-			if (req.timedout) return
-			res.status(200).send(results)
+			return res.status(200).send(results)
 		} catch (error) {
 			next(error)
 		}
