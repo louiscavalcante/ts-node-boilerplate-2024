@@ -1,24 +1,8 @@
-import { Writable } from 'node:stream'
-import { Logger, LoggerTraceability } from 'traceability'
-import winston from 'winston'
+import { Logger } from 'traceability'
 
-import { loggerConfiguration } from '@configs/logger.config'
+import { getLoggerOutput } from '@tests/tests.utils'
 
 jest.mock('traceability').spyOn(Logger, 'error')
-
-const getLoggerOutput = () => {
-	const loggerOutputData: string[] = []
-	const stream = new Writable()
-	stream._write = (chunk, encoding, next) => {
-		loggerOutputData.push(chunk.toString())
-		next()
-	}
-	const streamTransport = new winston.transports.Stream({ stream })
-	loggerConfiguration.transports = [streamTransport]
-	LoggerTraceability.configure(loggerConfiguration)
-
-	return { loggerOutputData, streamTransport }
-}
 
 describe('Logger config', () => {
 	let loggerOutput: string[]

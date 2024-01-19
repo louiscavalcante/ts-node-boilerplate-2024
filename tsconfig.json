@@ -26,6 +26,7 @@
 		"forceConsistentCasingInFileNames": true,
 		"baseUrl": ".",
 		"paths": {
+			"@tests/*": ["./src/__tests__/*"],
 			"@application/*": ["./src/application/*"],
 			"@configs/*": ["./src/configs/*"],
 			"@docs/*": ["./src/docs/*"],

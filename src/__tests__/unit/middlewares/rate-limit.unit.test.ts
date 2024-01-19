@@ -8,7 +8,7 @@ describe('RateLimit middleware', () => {
 	const seconds = 60
 	const maxRequest = 100
 
-	it('should create middleware with correct configuration', () => {
+	it('should create rate-limit middleware with correct configuration', () => {
 		RateLimit.middleware(seconds, maxRequest)
 
 		expect(rateLimit).toHaveBeenCalledWith({
