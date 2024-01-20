@@ -2,6 +2,6 @@ import { IUsersService } from '@domain/services/interfaces/users.service.interfa
 
 export default class UsersService implements IUsersService {
 	public async getUsers(): Promise<any> {
-		return ['Luiz', 'Jose']
+		return [{ name: 'Luiz' }, { name: 'Jose' }]
 	}
 }

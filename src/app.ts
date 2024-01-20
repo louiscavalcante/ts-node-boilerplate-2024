@@ -35,7 +35,7 @@ export default class App {
 			OpenApiValidator.middleware({
 				apiSpec: path.join(__dirname, 'docs/openapi.yaml'),
 				validateRequests: true,
-				validateResponses: false,
+				validateResponses: true,
 				validateSecurity: false,
 			})
 		)

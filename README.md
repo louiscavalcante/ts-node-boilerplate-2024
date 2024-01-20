@@ -20,6 +20,8 @@ $ npm run dev:requirements
     This will fix everything and let you know if you forgot about any error.<br>
     It will also run tests that were created or modified.
 
+-   Every time you update the `openapi.yaml` file, you need to run the `npm run update:openapi` script, to keep `openapi-schema.d.ts` updated, so you can use the openapi's schemas as types for this application.
+
 -   The `error-handler.middleware` will handle all errors, this also includes any unknown routes by the `openapi.yaml` and the errors thrown by the classes `DomainError` and `AxiosRequestError`.<br>
     When `NODE_ENV` is set to `production`. It will NOT interfere with the logs, but will change the error response to:<br>
     `http status 500` and the body response to: `Something bad happened`<br>

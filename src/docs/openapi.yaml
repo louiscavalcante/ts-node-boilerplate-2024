@@ -3,8 +3,7 @@ info:
   title: microservice-name
   description: microservice
   version: '1.0'
-security:
-  - basicAuth: []
+
 servers:
   - url: 'http://localhost/api'
     description: development
@@ -22,24 +21,23 @@ paths:
         Get users
       responses:
         '200':
-          description: Successful request
+          description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  type: object
-                  additionalProperties: false
-                  properties:
-                    name:
-                      type: string
+                  $ref: '#/components/schemas/User'
 
         default:
-          description: Invalid request
+          description: Errors
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+
+security:
+  - basicAuth: []
 
 components:
   securitySchemes:
@@ -52,7 +50,16 @@ components:
       properties:
         message:
           type: string
-        error:
+        stack:
+          type: string
+        axiosError:
           type: string
       required:
         - message
+
+    User:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string

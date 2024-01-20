@@ -90,5 +90,13 @@
 				"alphabetize": { "order": "asc", "ignoreCase": true }
 			}
 		]
-	}
+	},
+	"overrides": [
+		{
+			"files": ["./src/docs/openapi-schema.d.ts"],
+			"rules": {
+				"@typescript-eslint/naming-convention": "off"
+			}
+		}
+	]
 }

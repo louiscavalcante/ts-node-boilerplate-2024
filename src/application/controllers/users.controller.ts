@@ -1,6 +1,7 @@
 import express, { Router, Request, Response, NextFunction } from 'express'
 
 import { IControllers } from '@application/controllers/interfaces/controllers.interface'
+import { GetUsersSuccessResponse } from '@application/controllers/interfaces/users.controller.interface'
 import { IUsersService } from '@domain/services/interfaces/users.service.interface'
 
 export default class UsersController implements IControllers {
@@ -18,11 +19,11 @@ export default class UsersController implements IControllers {
 		return this.router.get('/users', this.getUsers)
 	}
 
-	private getUsers = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
+	private getUsers = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
 		try {
-			const results = await this.service.getUsers()
+			const users: GetUsersSuccessResponse = await this.service.getUsers()
 
-			return res.status(200).send(results)
+			res.status(200).send(users)
 		} catch (error) {
 			next(error)
 		}
